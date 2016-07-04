@@ -4,7 +4,6 @@ defmodule Gardex do
   def start(_type, _args) do
     {:ok, pid} = Gpio.start_link(17, :input)
     spawn fn -> monitor_sensor(pid) end
-
     {:ok, self}
   end
 

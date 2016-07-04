@@ -3,7 +3,6 @@
 /db
 /deps
 /*.ez
-/rel
 
 # Nerves images
 /_images

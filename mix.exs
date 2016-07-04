@@ -21,7 +21,7 @@ defmodule Gardex.Mixfile do
 
   def application do
     [mod: {Gardex, []},
-     applications: [:logger, :nerves_leds, :elixir_ale]]
+     applications: [:logger, :nerves_leds]]
   end
 
   defp deps do
