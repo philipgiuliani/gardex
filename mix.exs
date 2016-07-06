@@ -27,7 +27,8 @@ defmodule Gardex.Mixfile do
   defp deps do
     [{:nerves, "~> 0.3.0"},
      {:nerves_leds, "~> 0.7.0"},
-     {:elixir_ale, "~> 0.5.5"}]
+     {:elixir_ale, "~> 0.5.5"},
+     {:credo, "~> 0.4", only: [:dev, :test]}]
   end
 
   def system(target) do
