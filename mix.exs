@@ -7,7 +7,7 @@ defmodule Gardex.Mixfile do
     [app: :gardex,
      version: "0.1.0",
      elixir: "~> 1.3",
-     archives: [nerves_bootstrap: "~> 0.1.3"],
+     archives: [nerves_bootstrap: "~> 0.1.4"],
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      target: @target,
@@ -21,12 +21,11 @@ defmodule Gardex.Mixfile do
 
   def application do
     [mod: {Gardex, []},
-     applications: [:logger, :nerves_leds, :elixir_ale]]
+     applications: [:logger, :elixir_ale]]
   end
 
   defp deps do
     [{:nerves, "~> 0.3.0"},
-     {:nerves_leds, "~> 0.7.0"},
      {:elixir_ale, "~> 0.5.5"},
      {:credo, "~> 0.4", only: [:dev, :test]}]
   end

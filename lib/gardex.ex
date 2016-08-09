@@ -1,23 +1,22 @@
 defmodule Gardex do
-  alias Nerves.Leds
-  alias Gardex.Sensor
-  require Logger
+  use Application
+
+  alias Gardex.MoistureSensor
+  alias Gardex.Pot
+  alias Gardex.PotMonitor
+  alias Gardex.Pump
 
   def start(_type, _args) do
-    {:ok, pid} = Sensor.start_link(17)
-    spawn fn -> monitor_sensor(pid) end
+    {:ok, moisture_pid} = MoistureSensor.start_link(17)
+    {:ok, pump_pid} = Pump.start_link(27)
+
+    chilli_pot = %Pot{
+      name: "Habanero",
+      moisture_sensor: moisture_pid,
+      hydrator: pump_pid}
+
+    {:ok, _} = PotMonitor.start_link(chilli_pot)
+
     {:ok, self}
-  end
-
-  def monitor_sensor(pid) do
-    if Sensor.dry?(pid) do
-      Leds.set [{:green, false}]
-      Leds.set [{:red, false}]
-    else
-      Leds.set [{:green, true}]
-      Leds.set [{:red, true}]
-    end
-
-    monitor_sensor(pid)
   end
 end

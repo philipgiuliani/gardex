@@ -1,4 +1,4 @@
-defmodule Gardex.Sensor do
+defmodule Gardex.MoistureSensor do
   use GenServer
   require Logger
 
@@ -7,13 +7,15 @@ defmodule Gardex.Sensor do
   end
 
   def start_link(pin) do
-    GenServer.start_link(__MODULE__, pin, name: __MODULE__)
+    GenServer.start_link(__MODULE__, pin, [])
   end
+
+  def dry?(pid), do: GenServer.call(pid, :dry)
 
   def init(pin) do
     {:ok, pid} = Gpio.start_link(pin, :input)
 
-    Logger.debug "Initialized sensor"
+    Logger.debug "Moisture Sensor on pin ##{pin} initialized"
 
     state = %State{sensor: pid, dry: Gpio.read(pid) == 1}
     :ok = Gpio.set_int pid, :both
@@ -21,17 +23,17 @@ defmodule Gardex.Sensor do
     {:ok, state}
   end
 
-  def dry?(pid), do: GenServer.call(pid, :dry)
+  # Callbacks
 
   def handle_info({:gpio_interrupt, _, :rising}, state) do
-    Logger.debug "Handle rising callback"
+    Logger.debug "Moisture: rising sensor value"
     state = %{state | dry: true}
 
     {:noreply, state}
   end
 
   def handle_info({:gpio_interrupt, _, :falling}, state) do
-    Logger.debug "Handle falling callback"
+    Logger.debug "Moisture: falling sensor value"
     state = %{state | dry: false}
 
     {:noreply, state}
@@ -42,8 +44,6 @@ defmodule Gardex.Sensor do
   end
 
   def terminate(_reason, state) do
-    Logger.debug "Terminating"
-
     Gpio.release state.sensor
   end
 end
