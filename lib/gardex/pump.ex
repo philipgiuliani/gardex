@@ -14,6 +14,8 @@ defmodule Gardex.Pump do
 
   def stop(pid), do: GenServer.cast(pid, :stop)
 
+  def running?(pid), do: GenServer.call(pid, :running)
+
   def init(pin) do
     {:ok, pid} = Gpio.start_link(pin, :output)
 
@@ -25,6 +27,10 @@ defmodule Gardex.Pump do
   end
 
   # Callbacks
+
+  def handle_call(:running, _from, state) do
+    {:reply, state.running, state}
+  end
 
   def handle_cast(:start, state) do
     Gpio.write(state.pump, 1)

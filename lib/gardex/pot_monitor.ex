@@ -22,12 +22,17 @@ defmodule Gardex.PotMonitor do
   # Callbacks
 
   def handle_info(:monitor, state) do
-    Logger.debug "#{state.pot.name} Status:"
+    moisture_dry = MoistureSensor.dry?(state.pot.moisture_sensor)
+    pump_running = Pump.running?(state.pot.hydrator)
 
-    if MoistureSensor.dry?(state.pot.moisture_sensor) do
-      Pump.start(state.pot.hydrator)
-    else
-      Pump.stop(state.pot.hydrator)
+    case {moisture_dry,pump_running} do
+      {true, false} ->
+        Logger.debug "#{state.pot.name} is dry. Starting to hydrate"
+        Pump.start(state.pot.hydrator)
+      {false, true} ->
+        Logger.debug "#{state.pot.name} is wet. Stopping hydrator"
+        Pump.stop(state.pot.hydrator)
+      _ -> Logger.debug "#{state.pot.name} is happy"
     end
 
     schedule()
@@ -35,6 +40,6 @@ defmodule Gardex.PotMonitor do
   end
 
   def schedule do
-    Process.send_after(self(), :monitor, 10_000)
+    Process.send_after(self(), :monitor, 1_000)
   end
 end
