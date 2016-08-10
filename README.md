@@ -10,7 +10,7 @@
 
 ## My plans
 * [ ] Add support for analogue sensors
-* [ ] Pumps should be triggered on certain conditions, defined in a pot
+* [ ] Pumps should be triggered on certain conditions, defined in a pot
 * [ ] It should be possible to connect to a weather forecast service
 * [ ] Make it possible to configure the project easily (sensors, …)
 * [ ] There are no tests yet, probably the watering logic should get some tests.
