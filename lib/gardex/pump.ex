@@ -6,8 +6,8 @@ defmodule Gardex.Pump do
     defstruct pump: nil, running: false
   end
 
-  def start_link(pin) do
-    GenServer.start_link(__MODULE__, pin, [])
+  def start_link(pin, opts \\ []) do
+    GenServer.start_link(__MODULE__, pin, opts)
   end
 
   def start(pid), do: GenServer.cast(pid, :start)

@@ -9,13 +9,14 @@ defmodule Gardex.PotMonitor do
     defstruct pot: nil
   end
 
-  def start_link(pot) do
-    GenServer.start_link(__MODULE__, pot, [])
+  def start_link(pot, opts \\ []) do
+    GenServer.start_link(__MODULE__, pot, opts)
   end
 
   def init(pot) do
     Logger.debug "#{pot.name}: Starting Monitoring"
     schedule()
+
     {:ok, %State{pot: pot}}
   end
 

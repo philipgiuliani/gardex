@@ -6,8 +6,8 @@ defmodule Gardex.MoistureSensor do
     defstruct sensor: nil, dry: false
   end
 
-  def start_link(pin) do
-    GenServer.start_link(__MODULE__, pin, [])
+  def start_link(pin, opts \\ []) do
+    GenServer.start_link(__MODULE__, pin, opts)
   end
 
   def dry?(pid), do: GenServer.call(pid, :dry)

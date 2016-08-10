@@ -7,15 +7,21 @@ defmodule Gardex do
   alias Gardex.Pump
 
   def start(_type, _args) do
-    {:ok, moisture_pid} = MoistureSensor.start_link(17)
-    {:ok, pump_pid} = Pump.start_link(27)
+    import Supervisor.Spec
 
-    chilli_pot = %Pot{
-      name: "Habanero",
-      moisture_sensor: moisture_pid,
-      hydrator: pump_pid}
+    sensors = [
+      worker(MoistureSensor, [17, [name: :moisture_one]], id: make_ref()),
+      worker(MoistureSensor, [22, [name: :moisture_two]], id: make_ref()),
+      worker(Pump, [27, [name: :pump]], id: make_ref())
+    ]
 
-    {:ok, _} = PotMonitor.start_link(chilli_pot)
+    monitors = [
+      worker(PotMonitor, [%Pot{name: "Chilli", moisture_sensor: :moisture_one, hydrator: :pump}], id: make_ref()),
+      worker(PotMonitor, [%Pot{name: "Paprika", moisture_sensor: :moisture_two, hydrator: :pump}], id: make_ref())
+    ]
+
+    Supervisor.start_link(sensors, [strategy: :one_for_one])
+    Supervisor.start_link(monitors, [strategy: :one_for_one])
 
     {:ok, self}
   end
