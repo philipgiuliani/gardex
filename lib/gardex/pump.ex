@@ -2,6 +2,9 @@ defmodule Gardex.Pump do
   use GenServer
   require Logger
 
+  @on 0
+  @off 1
+
   defmodule State do
     defstruct pump: nil, running: false
   end
@@ -18,6 +21,7 @@ defmodule Gardex.Pump do
 
   def init(pin) do
     {:ok, pid} = Gpio.start_link(pin, :output)
+    Gpio.write(pid, @off)
 
     Logger.debug "Initialized pump"
 
@@ -33,14 +37,14 @@ defmodule Gardex.Pump do
   end
 
   def handle_cast(:start, state) do
-    Gpio.write(state.pump, 1)
+    Gpio.write(state.pump, @on)
 
     state = %State{state | running: true}
     {:noreply, state}
   end
 
   def handle_cast(:stop, state) do
-    Gpio.write(state.pump, 0)
+    Gpio.write(state.pump, @off)
 
     state = %State{state | running: false}
     {:noreply, state}
