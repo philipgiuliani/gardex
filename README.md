@@ -1,15 +1,28 @@
 # Gardex
 
-## Available sensors:
-* Brightness
-* Moisture
-* Temperature
+## Structure
+You can attach various sensors to the Raspberry PI. Currently i support (temperature, moisture, light).
 
-## Avaiable outputs:
-* Pump / Valve
+Sample initialization code:
+```elixir
+# Start all sensors
+SpiSensor.start_link(0x80, [name: :moisture])
+SpiSensor.start_link(0x90, [name: :temperature])
+SpiSensor.start_link(0xA0, [name: :light])
 
-## My plans
-* [ ] Add support for analogue sensors
+# Start the pump
+Pump.start_link(17, [name: :pump])
+
+# Assign all sensors to a pot, you can have multiple pots using the same pump.
+# You can pass a PID or a name.
+pot = %Pot{name: "Chilli", moisture: :moisture, temperature: :temperature, light: :light}
+
+# Start a monitor which will monitor all of the pots assigned to a pump
+Monitor.start_link(%{pump: :pump, pots: [pot]})
+```
+
+## Future plans
+* [x] Add support for analogue sensors
 * [ ] Pumps should be triggered on certain conditions, defined in a pot
 * [ ] It should be possible to connect to a weather forecast service
 * [ ] Make it possible to configure the project easily (sensors, …)
@@ -20,7 +33,7 @@
 ## Sample formwork plan
 ![Fritzing](https://raw.githubusercontent.com/philipgiuliani/gardex/master/fritzing/basic.jpg)
 
-## Contribution
+## Contributing
 I would love to see other people contributing to this project.
 
 ### Installation

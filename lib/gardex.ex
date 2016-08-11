@@ -1,25 +1,36 @@
 defmodule Gardex do
   use Application
 
-  alias Gardex.MoistureSensor
-  alias Gardex.Pot
-  alias Gardex.PotMonitor
+  alias Gardex.SpiSensor
   alias Gardex.Pump
+  alias Gardex.Pot
+  alias Gardex.Monitor
 
   def start(_type, _args) do
     import Supervisor.Spec
 
     sensors = [
-      worker(MoistureSensor, [17, [name: :moisture_one]], id: make_ref()),
-      worker(MoistureSensor, [22, [name: :moisture_two]], id: make_ref()),
-      worker(Pump, [27, [name: :pump]], id: make_ref())
+      worker(Spi, ["spidev0.0", [], [name: :spi]]),
+
+      # Inputs
+      worker(SpiSensor, [0x80, [name: :moisture]], id: make_ref()),
+      worker(SpiSensor, [0x90, [name: :temperature]], id: make_ref()),
+      worker(SpiSensor, [0xA0, [name: :light]], id: make_ref()),
+
+      # Outputs
+      worker(Pump, [17, [name: :pump]], id: make_ref())
+    ]
+
+    pots = [
+      %Pot{name: "Chilli", moisture: :moisture, temperature: :temperature, light: :light},
+      %Pot{name: "Paprika", moisture: :moisture, temperature: :temperature, light: :light}
     ]
 
     monitors = [
-      worker(PotMonitor, [%Pot{name: "Chilli", moisture_sensor: :moisture_one, hydrator: :pump}], id: make_ref()),
-      worker(PotMonitor, [%Pot{name: "Paprika", moisture_sensor: :moisture_two, hydrator: :pump}], id: make_ref())
+      worker(Monitor, [%{pump: :pump, pots: pots}], id: make_ref())
     ]
 
+    # Start everything up
     Supervisor.start_link(sensors, [strategy: :one_for_one])
     Supervisor.start_link(monitors, [strategy: :one_for_one])
 
