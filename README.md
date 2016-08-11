@@ -1,9 +1,6 @@
 # Gardex
 
-## Structure
-You can attach various sensors to the Raspberry PI. Currently i support (temperature, moisture, light).
-
-Sample initialization code:
+## Sample initialization code
 ```elixir
 # Start all sensors
 Sensor.start_link(0x80, [name: :moisture])
