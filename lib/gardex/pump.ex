@@ -23,8 +23,6 @@ defmodule Gardex.Pump do
     {:ok, pid} = Gpio.start_link(pin, :output)
     Gpio.write(pid, @off)
 
-    Logger.debug "Initialized pump"
-
     state = %State{pump: pid, running: false}
 
     {:ok, state}

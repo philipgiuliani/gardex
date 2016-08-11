@@ -32,6 +32,8 @@ defmodule Gardex.Monitor do
       {false, true} ->
         Logger.debug "Plants are happy now"
         Pump.stop(state.pump)
+      _ ->
+        Logger.debug "Everything ok"
     end
 
     schedule()
