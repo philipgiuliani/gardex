@@ -4,6 +4,7 @@ defmodule Gardex.Monitor do
 
   alias Gardex.Pot
   alias Gardex.Pump
+  alias Gardex.Sensor
 
   defmodule State do
     defstruct pump: nil, pots: nil
@@ -25,6 +26,12 @@ defmodule Gardex.Monitor do
     needs_water = Enum.any?(state.pots, &Pot.needs_water?(&1))
     pump_running = Pump.running?(state.pump)
 
+    # Log pots
+    Enum.each(state.pots, fn pot ->
+      Logger.debug "Pot #{pot.name} -> Light: #{Sensor.value(pot.light)}, Moisture: #{Sensor.value(pot.moisture)}, Temperature: #{Sensor.value(pot.temperature)}"
+    end)
+
+    # Handle watering
     case {needs_water, pump_running} do
       {true, false} ->
         Logger.debug "Some plant wants water"
@@ -32,8 +39,7 @@ defmodule Gardex.Monitor do
       {false, true} ->
         Logger.debug "Plants are happy now"
         Pump.stop(state.pump)
-      _ ->
-        Logger.debug "Everything ok"
+      _ -> true
     end
 
     schedule()

@@ -1,6 +1,5 @@
 defmodule Gardex.Sensor do
   use GenServer
-  require Logger
 
   def start_link(channel, opts \\ []) do
     GenServer.start_link(__MODULE__, channel, opts)
