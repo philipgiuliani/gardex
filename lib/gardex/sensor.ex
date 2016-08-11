@@ -1,4 +1,4 @@
-defmodule Gardex.SpiSensor do
+defmodule Gardex.Sensor do
   use GenServer
   require Logger
 

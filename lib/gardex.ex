@@ -1,7 +1,7 @@
 defmodule Gardex do
   use Application
 
-  alias Gardex.SpiSensor
+  alias Gardex.Sensor
   alias Gardex.Pump
   alias Gardex.Pot
   alias Gardex.Monitor
@@ -13,9 +13,9 @@ defmodule Gardex do
       worker(Spi, ["spidev0.0", [], [name: :spi]]),
 
       # Inputs
-      worker(SpiSensor, [0x80, [name: :moisture]], id: make_ref()),
-      worker(SpiSensor, [0x90, [name: :temperature]], id: make_ref()),
-      worker(SpiSensor, [0xA0, [name: :light]], id: make_ref()),
+      worker(Sensor, [0x80, [name: :moisture]], id: make_ref()),
+      worker(Sensor, [0x90, [name: :temperature]], id: make_ref()),
+      worker(Sensor, [0xA0, [name: :light]], id: make_ref()),
 
       # Outputs
       worker(Pump, [17, [name: :pump]], id: make_ref())

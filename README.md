@@ -6,9 +6,9 @@ You can attach various sensors to the Raspberry PI. Currently i support (tempera
 Sample initialization code:
 ```elixir
 # Start all sensors
-SpiSensor.start_link(0x80, [name: :moisture])
-SpiSensor.start_link(0x90, [name: :temperature])
-SpiSensor.start_link(0xA0, [name: :light])
+Sensor.start_link(0x80, [name: :moisture])
+Sensor.start_link(0x90, [name: :temperature])
+Sensor.start_link(0xA0, [name: :light])
 
 # Start the pump
 Pump.start_link(17, [name: :pump])
