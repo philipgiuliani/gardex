@@ -26,7 +26,7 @@ defmodule Fw.Mixfile do
 
   def deps do
     [{:ui, in_umbrella: true},
-     {:nerves_networking, github: "nerves-project/nerves_networking"}
+     {:nerves_networking, github: "nerves-project/nerves_networking"},
      {:nerves, "~> 0.3.0"}]
   end
 
