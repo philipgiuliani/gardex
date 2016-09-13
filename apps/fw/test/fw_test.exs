@@ -1,6 +1,6 @@
-defmodule GardexTest do
+defmodule FwTest do
   use ExUnit.Case
-  doctest Gardex
+  doctest Fw
 
   test "the truth" do
     assert 1 + 1 == 2
