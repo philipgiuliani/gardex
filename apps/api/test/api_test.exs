@@ -1,6 +1,6 @@
-defmodule UiTest do
+defmodule ApiTest do
   use ExUnit.Case
-  doctest Ui
+  doctest Api
 
   test "the truth" do
     assert 1 + 1 == 2

@@ -1,8 +1,8 @@
-defmodule Ui.Mixfile do
+defmodule Core.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :ui,
+    [app: :core,
      version: "0.1.0",
      build_path: "../../_build",
      config_path: "../../config/config.exs",
@@ -18,8 +18,8 @@ defmodule Ui.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [mod: {Ui, []},
-     applications: [:logger, :cowboy, :plug]]
+    [applications: [:logger],
+     mod: {Core, []}]
   end
 
   # Dependencies can be Hex packages:
@@ -36,7 +36,6 @@ defmodule Ui.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:cowboy, "~> 1.0"},
-     {:plug, "~> 1.0"}]
+    []
   end
 end
