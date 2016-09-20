@@ -1,7 +1,7 @@
 defmodule Fw.Mixfile do
   use Mix.Project
 
-  @target System.get_env("NERVES_TARGET") || "rpi2"
+  @target System.get_env("NERVES_TARGET") || "rpi"
 
   def project do
     [app: :fw,
@@ -12,7 +12,7 @@ defmodule Fw.Mixfile do
      build_path: "_build/#{@target}",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     aliases: aliases,
+     aliases: aliases(Mix.env),
      deps: deps ++ system(@target)]
   end
 
@@ -35,6 +35,10 @@ defmodule Fw.Mixfile do
     [{:"nerves_system_#{target}", ">= 0.0.0"}]
   end
 
+  def aliases(:prod) do
+    ["deploy": ["compile", "firmware", "firmware.burn"]] ++ aliases
+  end
+  def aliases(_), do: aliases
   def aliases do
     ["deps.precompile": ["nerves.precompile", "deps.precompile"],
      "deps.loadpaths":  ["deps.loadpaths", "nerves.loadpaths"]]

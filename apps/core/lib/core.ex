@@ -1,20 +1,22 @@
 defmodule Core do
   use Application
+  
+  require Logger
 
-  # See http://elixir-lang.org/docs/stable/elixir/Application.html
-  # for more information on OTP Applications
+  alias Core.Sensor
+  alias Core.Test
+
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
-    # Define workers and child supervisors to be supervised
     children = [
-      # Starts a worker by calling: Core.Worker.start_link(arg1, arg2, arg3)
-      # worker(Core.Worker, [arg1, arg2, arg3]),
+      worker(Spi, ["spidev0.0", [], [name: :spi]]),
+      worker(Sensor, [0x80, [name: :moisture]], id: make_ref()),
+      worker(Test, [:moisture], id: make_ref())
     ]
+    
+    Supervisor.start_link(children, [strategy: :one_for_one, name: Core.Supervisor])
 
-    # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
-    # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Core.Supervisor]
-    Supervisor.start_link(children, opts)
+    {:ok, self}
   end
 end
