@@ -18,7 +18,7 @@ defmodule Api.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :cowboy, :plug, :core],
+    [applications: [:logger, :cowboy, :plug, :core, :poison],
      mod: {Api, []}]
   end
 
@@ -38,6 +38,7 @@ defmodule Api.Mixfile do
   defp deps do
     [{:cowboy, "~> 1.0"},
      {:plug, "~> 1.0"},
+     {:poison, "~> 2.0"},
      {:core, in_umbrella: true}]
   end
 end
