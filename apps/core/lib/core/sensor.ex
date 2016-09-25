@@ -4,15 +4,15 @@ defmodule Core.Sensor do
 
   @iterations 8
 
+  # Public API
   def start_link(name, address) do
     GenServer.start_link(__MODULE__, address, [name: name])
   end
 
-  def init(address), do: {:ok, address}
-
   def value(pid), do: GenServer.call(pid, :value)
 
   # Callbacks
+  def init(address), do: {:ok, address}
 
   def handle_call(:value, _from, address) do
     result = read_sensor(address)
@@ -20,7 +20,6 @@ defmodule Core.Sensor do
   end
 
   # Internal
-
   defp read_sensor(address), do: read_sensor(address, 0, 0)
   defp read_sensor(address, sum, iterations) when iterations < @iterations do
     <<_::size(14), result::size(10)>> = Spi.transfer(:spi, <<1, address, 0>>)

@@ -13,7 +13,7 @@ defmodule Core.SensorSupervisor do
 
   def init(_) do
     children = [
-      worker(Core.Sensor, [], restart: :transient)
+      worker(Core.Sensor, [], restart: :permanent)
     ]
 
     supervise(children, strategy: :simple_one_for_one)

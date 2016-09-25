@@ -14,7 +14,6 @@ defmodule Api.Router do
   get "/pots" do
     pots =
       Core.get_pots()
-      |> extract_pids
       |> Enum.map(&build_pot_resp(&1))
 
     conn
@@ -24,10 +23,6 @@ defmodule Api.Router do
 
   match _ do
     send_resp(conn, 404, "not found")
-  end
-
-  defp extract_pids(children) do
-    Enum.map children, fn {_, pid, _, _} -> pid end
   end
 
   defp build_pot_resp(pid) do

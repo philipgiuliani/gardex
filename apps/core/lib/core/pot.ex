@@ -2,20 +2,22 @@ defmodule Core.Pot do
   use GenServer
 
   defmodule State do
-    defstruct name: nil, sensors: []
+    defstruct name: nil, sensors: [], irrigators: []
   end
-
-  def name(pid), do: GenServer.call(pid, :name)
-
-  def sensors(pid), do: GenServer.call(pid, :sensors)
 
   # Public API
   def start_link(name, sensors) do
     GenServer.start_link(__MODULE__, [name, sensors], [])
   end
 
-  # Internal API
+  def name(pid), do: GenServer.call(pid, :name)
+
+  def sensors(pid), do: GenServer.call(pid, :sensors)
+
+  # Callbacks
   def init([name, sensors]) do
+    schedule()
+
     state = %State{name: name, sensors: sensors}
     {:ok, state}
   end
@@ -26,5 +28,17 @@ defmodule Core.Pot do
 
   def handle_call(:sensors, _from, state) do
     {:reply, state.sensors, state}
+  end
+
+  # Internal
+  def handle_info(:monitor, state) do
+    # TODO
+
+    schedule()
+    {:noreply, state}
+  end
+
+  defp schedule() do
+    Process.send_after(self(), :monitor, 1_000)
   end
 end

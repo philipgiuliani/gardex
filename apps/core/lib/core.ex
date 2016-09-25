@@ -30,5 +30,6 @@ defmodule Core do
 
   def get_pots() do
     Supervisor.which_children(Core.PotSupervisor)
+    |> Enum.map(fn {_, pid, _, _} -> pid end)
   end
 end
