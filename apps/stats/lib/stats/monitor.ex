@@ -25,14 +25,17 @@ defmodule Stats.Monitor do
 
   defp write_to_database([]), do: :ok
   defp write_to_database([pid | tail]) do
+    id = pid |> Sensor.id() |> Atom.to_string
+    value = pid |> Sensor.value() |> round()
+
     stat = %Stats.Stat{
-      sensor_id: Atom.to_string(Sensor.id(pid)),
-      value: Sensor.value(pid)
+      sensor_id: id,
+      value: value
     }
 
     Stats.Repo.insert!(stat)
 
-    Logger.debug "Stats - Added #{stat.value} for sensor #{stat.sensor_id}"
+    Logger.debug "Stats - Added #{value} for sensor #{id}"
 
     write_to_database(tail)
   end
