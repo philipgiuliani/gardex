@@ -14,6 +14,12 @@ defmodule Stats do
     ]
 
     Supervisor.start_link(children, [strategy: :one_for_one])
+
+    # initialize
+    Mix.Tasks.Ecto.Create.run(r: "Stats.Repo")
+    Mix.Tasks.Ecto.Migrate.run([])
+
+    {:ok, self}
   end
 
   def get_stats(sensor_id) when is_atom(sensor_id),

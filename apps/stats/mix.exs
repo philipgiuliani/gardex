@@ -38,6 +38,7 @@ defmodule Stats.Mixfile do
   defp deps do
     [{:core, in_umbrella: true},
      {:ecto, "~> 2.0.0"},
+     {:poison, "~> 2.0.0", override: true},
      {:sqlite_ecto, github: "obmarg/sqlite_ecto", branch: "feature/ecto-2.0"}]
   end
 end
