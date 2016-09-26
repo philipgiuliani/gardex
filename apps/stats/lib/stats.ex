@@ -25,6 +25,9 @@ defmodule Stats do
     {:ok, self}
   end
 
+  @doc """
+  Returns the stats of a given sensor
+  """
   def get_stats(sensor_id) when is_atom(sensor_id), do: Atom.to_string(sensor_id)
   def get_stats(sensor_id) do
     Stat
@@ -35,14 +38,14 @@ defmodule Stats do
   @doc """
   Creates the sqlite database
   """
-  def storage_up() do
+  defp storage_up() do
     Sqlite.Ecto.storage_up(database: "/root/stats.sqlite")
   end
 
   @doc """
   Runs all migrations
   """
-  def migrate() do
+  defp migrate() do
     path = Application.app_dir(:stats, "priv/repo/migrations")
     Ecto.Migrator.run(Stats.Repo, path, :up, all: true)
   end
