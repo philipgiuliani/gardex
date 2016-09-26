@@ -36,9 +36,20 @@ defmodule Api.Router do
   end
 
   defp build_sensor_resp(pid) do
+    sensor_id = Sensor.id(pid)
+    stats = Stats.get_stats(sensor_id)
+
     %{
-      name: Atom.to_string(pid),
-      value: Sensor.value(pid)
+      name: Atom.to_string(sensor_id),
+      value: Sensor.value(pid),
+      stats: Enum.map(stats, &build_stat_resp(&1))
+    }
+  end
+
+  defp build_stat_resp(stat) do
+    %{
+      value: stat.value,
+      inserted_at: stat.inserted_at
     }
   end
 end

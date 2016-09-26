@@ -16,6 +16,8 @@ defmodule Stats do
     Supervisor.start_link(children, [strategy: :one_for_one])
   end
 
+  def get_stats(sensor_id) when is_atom(sensor_id),
+    do: Atom.to_string(sensor_id)
   def get_stats(sensor_id) do
     Stat
     |> where(sensor_id: ^sensor_id)
