@@ -4,7 +4,7 @@ defmodule Stats.Monitor do
   alias Core.Sensor
   require Logger
 
-  @interval 15 * 60 * 1000
+  @interval 1 * 60 * 1000
 
   def start_link do
     GenServer.start_link(__MODULE__, %{})
@@ -24,9 +24,9 @@ defmodule Stats.Monitor do
   end
 
   defp write_to_database([]), do: :ok
-  defp write_to_database([pid, tail]) do
+  defp write_to_database([pid | tail]) do
     stat = %Stats.Stat{
-      sensor_id: Sensor.id(pid),
+      sensor_id: Atom.to_string(Sensor.id(pid)),
       value: Sensor.value(pid)
     }
 
