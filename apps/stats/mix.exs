@@ -18,7 +18,7 @@ defmodule Stats.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger],
+    [applications: [:logger, :ecto, :sqlite_ecto],
      mod: {Stats, []}]
   end
 
@@ -37,6 +37,7 @@ defmodule Stats.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [{:core, in_umbrella: true},
-     {:sqlitex, "~> 1.0.0"}]
+     {:ecto, "~> 2.0.0"},
+     {:sqlite_ecto, github: "obmarg/sqlite_ecto", branch: "feature/ecto-2.0"}]
   end
 end
