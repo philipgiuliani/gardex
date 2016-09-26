@@ -1,3 +1,6 @@
+## Erlang SMP
+-smp enable
+
 ## Start the Elixir shell
 -noshell
 -user Elixir.IEx.CLI

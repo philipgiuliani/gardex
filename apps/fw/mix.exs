@@ -38,7 +38,8 @@ defmodule Fw.Mixfile do
   end
 
   def aliases(:prod) do
-    ["deploy": ["compile", "firmware", "firmware.burn"]] ++ aliases
+    ["deploy": ["firmware", "firmware.burn"],
+     "upgrade": ["firmware", "firmware.burn --task upgrade"]] ++ aliases
   end
   def aliases(_), do: aliases
   def aliases do
