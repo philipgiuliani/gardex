@@ -7,10 +7,6 @@ defmodule Api.Router do
   plug :match
   plug :dispatch
 
-  get "/hello" do
-    send_resp(conn, 200, "world")
-  end
-
   get "/pots" do
     pots =
       Core.get_pots()
@@ -21,6 +17,16 @@ defmodule Api.Router do
     |> send_resp(200, Poison.encode!(%{pots: pots}))
   end
 
+  get "/stats/:sensor" do
+    stats =
+      Stats.get_stats(sensor)
+      |> Enum.map(&build_stat_resp(&1))
+
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(200, Poison.encode!(%{stats: stats}))
+  end
+
   match _ do
     send_resp(conn, 404, "not found")
   end
@@ -29,27 +35,19 @@ defmodule Api.Router do
     name = Pot.name(pid)
     sensors = Pot.sensors(pid)
 
-    %{
-      name: name,
-      sensors: Enum.map(sensors, &build_sensor_resp(&1))
-    }
+    %{name: name,
+      sensors: Enum.map(sensors, &build_sensor_resp(&1))}
   end
 
   defp build_sensor_resp(pid) do
     sensor_id = Sensor.id(pid)
-    stats = Stats.get_stats(sensor_id)
 
-    %{
-      name: Atom.to_string(sensor_id),
-      value: Sensor.value(pid),
-      stats: Enum.map(stats, &build_stat_resp(&1))
-    }
+    %{name: Atom.to_string(sensor_id),
+      value: Sensor.value(pid)}
   end
 
   defp build_stat_resp(stat) do
-    %{
-      value: stat.value,
-      inserted_at: stat.inserted_at
-    }
+    %{value: stat.value,
+      inserted_at: stat.inserted_at}
   end
 end

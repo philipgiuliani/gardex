@@ -8,12 +8,19 @@ defmodule Stats do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
+    # Create database
+    storage_up()
+
+    # Start childs
     children = [
-      # worker(Stats.Repo, []),
-      # worker(Stats.Monitor, [])
+      worker(Stats.Repo, []),
+      worker(Stats.Monitor, [])
     ]
 
     Supervisor.start_link(children, [strategy: :one_for_one])
+
+    # Migrate database after Stats.Repo has been started
+    migrate()
 
     {:ok, self}
   end
@@ -25,10 +32,16 @@ defmodule Stats do
     |> Repo.all()
   end
 
+  @doc """
+  Creates the sqlite database
+  """
   def storage_up() do
-    Sqlite.Ecto.storage_up([database: "/root/stats.sqlite"])
+    Sqlite.Ecto.storage_up(database: "/root/stats.sqlite")
   end
 
+  @doc """
+  Runs all migrations
+  """
   def migrate() do
     path = Application.app_dir(:stats, "priv/repo/migrations")
     Ecto.Migrator.run(Stats.Repo, path, :up, all: true)
