@@ -30,6 +30,15 @@ defmodule Core do
 
   def get_pots() do
     Supervisor.which_children(Core.PotSupervisor)
-    |> Enum.map(fn {_, pid, _, _} -> pid end)
+    |> extract_pid_from_children
+  end
+
+  def get_sensors() do
+    Supervisor.which_children(Core.SensorSupervisor)
+    |> extract_pid_from_children
+  end
+
+  defp extract_pid_from_children(children) do
+    Enum.map(children, fn {_, pid, _, _} -> pid end)
   end
 end

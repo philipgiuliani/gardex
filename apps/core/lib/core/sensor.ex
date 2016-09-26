@@ -4,19 +4,31 @@ defmodule Core.Sensor do
 
   @iterations 8
 
+  defmodule State do
+    defstruct id: nil, address: nil
+  end
+
   # Public API
   def start_link(name, address) do
-    GenServer.start_link(__MODULE__, address, [name: name])
+    state = %State{address: address, id: name}
+
+    GenServer.start_link(__MODULE__, state, [name: name])
   end
 
   def value(pid), do: GenServer.call(pid, :value)
 
-  # Callbacks
-  def init(address), do: {:ok, address}
+  def id(pid), do: GenServer.call(pid, :id)
 
-  def handle_call(:value, _from, address) do
+  # Callbacks
+  def init(state), do: {:ok, state}
+
+  def handle_call(:id, _from, %{id: id} = state) do
+    {:reply, id, state}
+  end
+
+  def handle_call(:value, _from, %{address: address} = state) do
     result = read_sensor(address)
-    {:reply, result, address}
+    {:reply, result, state}
   end
 
   # Internal
