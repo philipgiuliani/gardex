@@ -17,4 +17,4 @@ erl_crash.dump
 *.ez
 
 # Ignore stats database
-apps/api/stats.sqlite3
+stats.sqlite

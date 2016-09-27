@@ -1,6 +1,8 @@
 defmodule Stats do
   use Application
 
+  @db_config Application.get_env(:stats, Stats.Repo)
+
   alias Stats.Stat
   alias Stats.Repo
   import Ecto.Query, only: [where: 2]
@@ -39,7 +41,7 @@ defmodule Stats do
   Creates the sqlite database
   """
   defp storage_up() do
-    Sqlite.Ecto.storage_up(database: "/root/stats.sqlite")
+    Sqlite.Ecto.storage_up(@db_config)
   end
 
   @doc """

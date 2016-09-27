@@ -1,6 +1,8 @@
 defmodule Api do
   use Application
 
+  @port Application.get_env(:api, :port)
+
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do
@@ -9,7 +11,7 @@ defmodule Api do
     # Define workers and child supervisors to be supervised
     children = [
       # Starts a worker by calling: Api.Worker.start_link(arg1, arg2, arg3)
-      Plug.Adapters.Cowboy.child_spec(:http, Api.Router, [], [port: 4000])
+      Plug.Adapters.Cowboy.child_spec(:http, Api.Router, [], [port: @port])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
