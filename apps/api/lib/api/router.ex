@@ -17,7 +17,7 @@ defmodule Api.Router do
     |> send_resp(200, Poison.encode!(%{pots: pots}))
   end
 
-  get "/stats/:sensor" do
+  get "/sensors/:sensor" do
     stats =
       Stats.get_stats(sensor)
       |> Enum.map(&build_stat_resp(&1))
