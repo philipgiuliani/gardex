@@ -18,3 +18,4 @@ erl_crash.dump
 
 # Ignore stats database
 stats.sqlite
+apps/fw/_nerves-tmp/
