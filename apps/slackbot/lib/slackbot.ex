@@ -1,4 +1,4 @@
-defmodule Fw do
+defmodule Slackbot do
   use Application
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
@@ -8,15 +8,12 @@ defmodule Fw do
 
     # Define workers and child supervisors to be supervised
     children = [
-      worker(Task, [fn -> Nerves.Networking.setup :eth0, [mode: "dhcp"] end], restart: :transient, id: :networking)
+      worker(Slackbot.Robot, [])
     ]
-
-    # TODO: Check NTP
-    # System.cmd("ntpd", ["-q", "-p", "pool.ntp.org"])
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Fw.Supervisor]
+    opts = [strategy: :one_for_one, name: Slackbot.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end
