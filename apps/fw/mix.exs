@@ -23,17 +23,12 @@ defmodule Fw.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Fw, []},
-     applications: applications(Mix.env)]
+     applications: [:logger, :nerves_networking, :core, :api, :stats]]
   end
-
-  defp applications(:prod), do: [:nerves_ntp] ++ applications
-  defp applications(_), do: applications
-  defp applications(), do: [:logger, :core, :api, :nerves_networking, :stats]
 
   def deps do
     [{:nerves, "~> 0.3.0"},
      {:nerves_networking, github: "nerves-project/nerves_networking"},
-     {:nerves_ntp, "~> 0.1.0", only: :prod},
      {:core, in_umbrella: true},
      {:stats, in_umbrella: true},
      {:api, in_umbrella: true}]
@@ -45,7 +40,7 @@ defmodule Fw.Mixfile do
 
   def aliases(:prod) do
     ["deploy": ["firmware", "firmware.burn"],
-     "upgrade": ["firmware", "firmware.burn --task upgrade"]] ++ aliases
+     "upgrade": ["firmware", "firmware.burn -t upgrade"]] ++ aliases
   end
   def aliases(_), do: aliases
   def aliases do

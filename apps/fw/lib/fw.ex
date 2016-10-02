@@ -16,5 +16,4 @@ defmodule Fw do
     opts = [strategy: :one_for_one, name: Fw.Supervisor]
     Supervisor.start_link(children, opts)
   end
-
 end

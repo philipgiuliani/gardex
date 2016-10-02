@@ -18,7 +18,7 @@ defmodule Stats.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :sqlite_ecto, :ecto],
+    [applications: [:logger, :sqlite_ecto, :ecto, :db_connection],
      mod: {Stats, []}]
   end
 

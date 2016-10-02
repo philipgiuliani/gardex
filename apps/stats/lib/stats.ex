@@ -3,7 +3,7 @@ defmodule Stats do
 
   alias Stats.Stat
   alias Stats.Repo
-  import Ecto.Query, only: [where: 2]
+  import Ecto.Query, only: [where: 2, where: 3]
 
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
@@ -28,10 +28,20 @@ defmodule Stats do
   @doc """
   Returns the stats of a given sensor
   """
-  def get_stats(sensor_id) when is_atom(sensor_id), do: Atom.to_string(sensor_id)
   def get_stats(sensor_id) do
+    %{year: year, month: month, day: day} = DateTime.utc_now
+    {:ok, date} = Date.new(year, month, day)
+    get_stats(sensor_id, date)
+  end
+  def get_stats(sensor_id, date) do
+    date_erl = Date.to_erl(date)
+    from_time = Ecto.DateTime.from_erl({date_erl,{0, 0, 0}})
+    to_time = Ecto.DateTime.from_erl({date_erl,{23, 59, 59}})
+
     Stat
     |> where(sensor_id: ^sensor_id)
+    |> where([s], s.inserted_at >= ^from_time)
+    |> where([s], s.inserted_at <= ^to_time)
     |> Repo.all()
   end
 
