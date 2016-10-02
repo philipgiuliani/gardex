@@ -18,17 +18,29 @@ defmodule Api.Router do
   end
 
   get "/sensors/:sensor" do
-    stats =
-      Stats.get_stats(sensor)
-      |> Enum.map(&build_stat_resp(&1))
+    stats =  Stats.get_stats(sensor)
+    render_stats(conn, stats)
+  end
 
-    conn
-    |> put_resp_content_type("application/json")
-    |> send_resp(200, Poison.encode!(%{stats: stats}))
+  get "/sensors/:sensor/:date" do
+    {:ok, date} = Date.from_iso8601(date)
+
+    stats = Stats.get_stats(sensor, date)
+    render_stats(conn, stats)
   end
 
   match _ do
     send_resp(conn, 404, "not found")
+  end
+
+  defp render_stats(conn, stats) do
+    response =
+      stats
+      |> Enum.map(&build_stat_resp(&1))
+
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(200, Poison.encode!(%{stats: response}))
   end
 
   defp build_pot_resp(pid) do
