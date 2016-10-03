@@ -3,7 +3,7 @@ defmodule Stats.Stat do
 
   schema "stats" do
     field :sensor_id, :string
-    field :value, :integer
+    field :value, :float
 
     timestamps(updated_at: false)
   end

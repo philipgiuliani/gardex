@@ -18,9 +18,9 @@ defmodule Core do
     ### This part will be handled by a configuration
 
     # Setup Sensors
-    Core.SensorSupervisor.start_sensor(:moisture, 0x80)
-    Core.SensorSupervisor.start_sensor(:temperature, 0x90)
-    Core.SensorSupervisor.start_sensor(:light, 0xA0)
+    Core.SensorSupervisor.start_sensor(id: :moisture, address: 0x80)
+    Core.SensorSupervisor.start_sensor(id: :temperature, address: 0x90, converter: Core.Converters.TMP36)
+    Core.SensorSupervisor.start_sensor(id: :light, address: 0xA0)
 
     # Setup Pots
     Core.PotSupervisor.start_pot("Chilli", [:moisture, :temperature, :light])

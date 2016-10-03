@@ -2,7 +2,7 @@ defmodule Core.Pot do
   use GenServer
 
   defmodule State do
-    defstruct name: nil, sensors: [], irrigators: []
+    defstruct name: nil, sensors: []
   end
 
   # Public API

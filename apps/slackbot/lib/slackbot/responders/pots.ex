@@ -4,8 +4,8 @@ defmodule Slackbot.Responders.Pots do
   @usage """
   gardex pots - Responds with a list of pots
   """
-  hear ~r/\pots$/i, msg do
+  respond ~r/pots$/i, msg do
     IO.inspect msg
-    reply msg, "Return pots"
+    reply msg, "TODO: Return a list of pots"
   end
 end

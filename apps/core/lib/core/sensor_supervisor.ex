@@ -7,8 +7,8 @@ defmodule Core.SensorSupervisor do
     Supervisor.start_link(__MODULE__, [], name: @name)
   end
 
-  def start_sensor(name, address) do
-    Supervisor.start_child(@name, [name, address])
+  def start_sensor(opts) do
+    Supervisor.start_child(@name, [opts])
   end
 
   def init(_) do

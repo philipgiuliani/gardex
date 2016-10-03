@@ -5,7 +5,7 @@ use Mix.Config
 config :slackbot, Slackbot.Robot,
   adapter: Hedwig.Adapters.Slack,
   name: "gardex",
-  aka: "/",
+  aka: "<@U2JCPVB27>",
   token: System.get_env("GARDEX_SLACK_TOKEN"),
   responders: [
     {Hedwig.Responders.Help, []},

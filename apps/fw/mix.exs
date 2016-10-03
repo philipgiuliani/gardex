@@ -23,7 +23,7 @@ defmodule Fw.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Fw, []},
-     applications: [:logger, :nerves_networking, :core, :api, :stats]]
+     applications: [:logger, :nerves_networking, :core, :api, :stats, :slackbot]]
   end
 
   def deps do
@@ -31,7 +31,8 @@ defmodule Fw.Mixfile do
      {:nerves_networking, github: "nerves-project/nerves_networking"},
      {:core, in_umbrella: true},
      {:stats, in_umbrella: true},
-     {:api, in_umbrella: true}]
+     {:api, in_umbrella: true},
+     {:slackbot, in_umbrella: true}]
   end
 
   def system(target) do
