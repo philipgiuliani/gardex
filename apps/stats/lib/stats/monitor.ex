@@ -16,9 +16,6 @@ defmodule Stats.Monitor do
   end
 
   def handle_info(:collect, state) do
-    # Temporary
-    System.cmd("ntpd", ["-q", "-p", "pool.ntp.org"])
-
     Core.get_sensors()
     |> write_to_database
 

@@ -9,8 +9,6 @@ config :slackbot, Slackbot.Robot,
   token: System.get_env("GARDEX_SLACK_TOKEN"),
   responders: [
     {Hedwig.Responders.Help, []},
-    {Hedwig.Responders.GreatSuccess, []},
-    {Hedwig.Responders.ShipIt, []},
     {Slackbot.Responders.Pots, []}
   ]
 
